@@ -4,13 +4,16 @@ using System.Collections;
 public class GridCreator : MonoBehaviour
 {
     [SerializeField] private GameObject gridPrefab;
-    
     [SerializeField] private Transform cellLocation;
+
+    // 1. Declare the 2D array container
+    private Cell[,] gameGrid = new Cell[9, 9];
 
     void Start()
     {
         StartCoroutine(TimedCellCreator());
     }
+
     IEnumerator TimedCellCreator()
     {
         float startX = -4.5f;
@@ -22,14 +25,25 @@ public class GridCreator : MonoBehaviour
             {
                 float xPos = startX + col;
                 float yPos = startY - row;
+                Vector3 spawnPosition = new Vector3(xPos, yPos, 0);
                 
-                Vector3 SpawnPosition = new Vector3 (xPos, yPos, 0);
+                // 2. Spawn the visual tile like you did before
+                GameObject newTile = Instantiate(gridPrefab, spawnPosition, Quaternion.identity, cellLocation);
                 
-                Instantiate(gridPrefab, SpawnPosition, Quaternion.identity, cellLocation);
+                // 3. Create the data cell and link the visual tile to it
+                Cell newCell = new Cell(col, row, newTile);
                 
-                yield return new WaitForSeconds(0.25f);
+                // 4. Save this cell into our 2D array matrix
+                gameGrid[col, row] = newCell;
+                
+                // Name the object in the hierarchy by its array coordinates
+                newTile.name = "Cell_" + col + "_" + row;
+
+                yield return new WaitForSeconds(0.1f);
             }
         }
         
+        // Debug check to prove the array works after the grid finishes loading
+        Debug.Log("Grid fully loaded! Cell [4,4] visual object is: " + gameGrid[4, 4].VisualTile.name);
     }
 }

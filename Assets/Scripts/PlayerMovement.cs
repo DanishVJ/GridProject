@@ -54,8 +54,22 @@ public class PlayerMovement : MonoBehaviour
       {
       moveDirection = new Vector3(0, Mathf.Sign(inputVector.y) * cellSize, 0);
       }
-    
-    targetPosition += moveDirection;
+    // 1. Calculate where the player WANTS to go next
+    Vector3 potentialTarget = targetPosition + moveDirection;
+
+    // 2. Ask the GridCreator to find the cell at that world position
+    Cell nextCell = GridCreator.Instance.GetCellFromWorldPosition(potentialTarget);
+
+    // 3. Check if the cell exists and if it is walkable
+    if (nextCell != null && nextCell.IsWalkable())
+    {
+      // Path is clear! Go ahead and update the target position
+      targetPosition = potentialTarget;
+    }
+    else
+    {
+      Debug.Log("Movement blocked! The cell is either off the grid, a wall, or an enemy.");
+    }
   }
   
 }

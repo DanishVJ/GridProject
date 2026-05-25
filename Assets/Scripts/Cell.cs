@@ -1,10 +1,18 @@
 using UnityEngine;
 
+public enum CellState
+{
+    Empty,
+    Wall,
+    Enemy,
+    PowerUp
+}
+    
 public class Cell 
 {
     public int xIndex;
     public int yIndex;
-    public bool isWalkable = true;
+    public CellState currentState = CellState.Empty;
     
     // Holds a reference to the physical tile sprite in the scene
     public GameObject VisualTile; 
@@ -15,5 +23,11 @@ public class Cell
         xIndex = x;
         yIndex = y;
         VisualTile = tileObj;
+        currentState = CellState.Empty;
+    }
+
+    public bool IsWalkable()
+    {
+        return currentState == CellState.Empty || currentState == CellState.PowerUp;
     }
 }

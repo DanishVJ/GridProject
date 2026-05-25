@@ -3,12 +3,25 @@ using System.Collections;
 
 public class GridCreator : MonoBehaviour
 {
+    //Singleton setup
+    public static GridCreator Instance { get; private set; }
+    
     [SerializeField] private GameObject gridPrefab;
     [SerializeField] private Transform cellLocation;
 
     // 1. Declare the 2D array container
     private Cell[,] gameGrid = new Cell[10, 10];
 
+    void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        
+        else {Destroy(gameObject);}
+    }
+    
     void Start()
     {
         StartCoroutine(TimedCellCreator());
@@ -44,6 +57,25 @@ public class GridCreator : MonoBehaviour
         }
         
         // Debug check to prove the array works after the grid finishes loading
-        Debug.Log("Grid fully loaded! Cell [4,4] visual object is: " + gameGrid[4, 4].VisualTile.name);
+        Debug.Log("Grid fully loaded!");
     }
+
+    public Cell GetCellFromWorldPosition(Vector3 worldPosition)
+    {
+        float startX = -4.5f;
+        float startY = 4.5f;
+
+        // 1. Reverse-engineer the position math from your loop
+        int col = Mathf.RoundToInt(worldPosition.x - startX);
+        int row = Mathf.RoundToInt(startY - worldPosition.y);
+
+        // 2. Safety check: Make sure the coordinates are safely inside your 10x10 array bounds
+        if (col >= 0 && col < 10 && row >= 0 && row < 10)
+        {
+            return gameGrid[col, row];
+        }
+
+        return null; // Return nothing if it's out of bounds (off the grid)
+    }
+    
 }

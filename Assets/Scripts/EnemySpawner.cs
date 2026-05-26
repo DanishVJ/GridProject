@@ -27,7 +27,7 @@ public class EnemySpawner : MonoBehaviour
 
             GameObject spawnedEnemy = Instantiate(enemyPrefab, _spawnPosition, spawnRotation);
             
-            Vector3 targetDestination = _spawnPosition + (enemySpawnPoints[_randomIndex].up * 11f);
+            Vector3 targetDestination = _spawnPosition + (enemySpawnPoints[_randomIndex].up * 10f);
 
             // 3. Get the Enemy script component from the prefab and pass it the target destination
             EnemyMovement enemyScript = spawnedEnemy.GetComponent<EnemyMovement>();

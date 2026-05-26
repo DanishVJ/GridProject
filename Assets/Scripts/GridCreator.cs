@@ -10,7 +10,7 @@ public class GridCreator : MonoBehaviour
     [SerializeField] private Transform cellLocation;
 
     // 1. Declare the 2D array container
-    private Cell[,] gameGrid = new Cell[10, 10];
+    private Cell[,] gameGrid = new Cell[9, 9];
 
     void Awake()
     {
@@ -24,17 +24,17 @@ public class GridCreator : MonoBehaviour
     
     void Start()
     {
-        StartCoroutine(TimedCellCreator());
+        CreateGrid();
     }
 
-    IEnumerator TimedCellCreator()
+    void CreateGrid()
     {
-        float startX = -4.5f;
-        float startY = 4.5f;
+        float startX = -4f;
+        float startY = 4f;
         
-        for (int row = 0; row < 10; row++)
+        for (int row = 0; row < 9; row++)
         {
-            for (int col = 0; col < 10; col++)
+            for (int col = 0; col < 9; col++)
             {
                 float xPos = startX + col;
                 float yPos = startY - row;
@@ -50,9 +50,7 @@ public class GridCreator : MonoBehaviour
                 gameGrid[col, row] = newCell;
                 
                 // Name the object in the hierarchy by its array coordinates
-                newTile.name = "Cell_" + col + "_" + row;
-
-                yield return new WaitForSeconds(0.1f);
+                newTile.name = "Cell_" + col + "_" + row; ;
             }
         }
         
@@ -62,15 +60,15 @@ public class GridCreator : MonoBehaviour
 
     public Cell GetCellFromWorldPosition(Vector3 worldPosition)
     {
-        float startX = -4.5f;
-        float startY = 4.5f;
+        float startX = -4f;
+        float startY = 4f;
 
         // 1. Reverse-engineer the position math from your loop
         int col = Mathf.RoundToInt(worldPosition.x - startX);
         int row = Mathf.RoundToInt(startY - worldPosition.y);
 
         // 2. Safety check: Make sure the coordinates are safely inside your 10x10 array bounds
-        if (col >= 0 && col < 10 && row >= 0 && row < 10)
+        if (col >= 0 && col < 9 && row >= 0 && row < 9)
         {
             return gameGrid[col, row];
         }

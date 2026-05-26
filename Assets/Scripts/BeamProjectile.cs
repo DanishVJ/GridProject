@@ -45,6 +45,8 @@ public class BeamProjectile : MonoBehaviour
             if (enemyCell != null)
                 enemyCell.currentState = CellState.Empty;
 
+            GameManager.Instance.AddScore(1);
+            
             Destroy(other.gameObject);
         }
     }

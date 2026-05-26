@@ -55,13 +55,32 @@ public class PlayerMovement : MonoBehaviour
       {
       moveDirection = new Vector3(0, Mathf.Sign(inputVector.y) * _cellSize, 0);
       }
-    // 1. Calculate where the player WANTS to go next
+    
+    if (moveDirection == Vector3.zero) return;
+
+    // 1. Check if we are already facing the direction the player wants to go.
+    // We normalize moveDirection so we are comparing pure directions (like Vector3.up vs Vector3.up)
+    Vector3 intendedDirection = moveDirection.normalized;
+
+    if (_playerFacing.FacingDirection != intendedDirection)
+    {
+      // First keypress: We are NOT facing this way yet. 
+      // Just turn the player, save the new direction, and STOP here (return).
+      _playerFacing.SetFacing(moveDirection);
+      Debug.Log("First Input: Turned to face " + intendedDirection);
+      return; 
+    }
+
+    // Second keypress: We ARE already facing this way! Proceed with normal movement.
+    Debug.Log("Second Input: Moving forward!");
+    
+    // 2. Calculate where the player WANTS to go next
     Vector3 potentialTarget = _targetPosition + moveDirection;
 
-    // 2. Ask the GridCreator to find the cell at that world position
+    // 3. Ask the GridCreator to find the cell at that world position
     Cell nextCell = GridCreator.Instance.GetCellFromWorldPosition(potentialTarget);
 
-    // 3. Check if the cell exists and if it is walkable
+    // 4. Check if the cell exists and if it is walkable
     if (nextCell != null && nextCell.IsWalkable())
     {
       // Path is clear! Go ahead and update the target position
@@ -70,7 +89,7 @@ public class PlayerMovement : MonoBehaviour
     }
     else
     {
-      Debug.Log("Movement blocked! The cell is either off the grid, a wall, or an enemy.");
+      Debug.Log("Movement blocked! The cell is either off the grid.");
     }
   }
   

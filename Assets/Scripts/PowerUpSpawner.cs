@@ -5,8 +5,7 @@ public class PowerUpSpawner : MonoBehaviour
 {
     [SerializeField] private GameObject powerUpPrefab;
     [SerializeField] private Transform[] spawnPoints;
-    [SerializeField] private float spawnRate = 15f;      // slower spawn rates
-    [SerializeField] private float spawnDelay = 2f;     // initial delay before first spawn
+    [SerializeField] private float spawnDelay = 2f;     // spawn rates
 
     void Start()
     {
@@ -15,8 +14,6 @@ public class PowerUpSpawner : MonoBehaviour
 
     IEnumerator TimedPowerUpSpawner()
     {
-        yield return new WaitForSeconds(spawnDelay);
-
         while (true)
         {
             int randomIndex = Random.Range(0, spawnPoints.Length);
@@ -31,7 +28,7 @@ public class PowerUpSpawner : MonoBehaviour
             if (powerUpScript != null)
                 powerUpScript.SetTarget(target);
 
-            yield return new WaitForSeconds(spawnRate);
+            yield return new WaitForSeconds(spawnDelay);
         }
     }
 }

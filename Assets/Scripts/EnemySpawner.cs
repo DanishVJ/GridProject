@@ -5,7 +5,7 @@ public class EnemySpawner : MonoBehaviour
 {
     [SerializeField] private GameObject enemyPrefab;
     [SerializeField] private Transform[] enemySpawnPoints;
-    [SerializeField] private float spawnRate = 1f;
+    [SerializeField] private float spawnDelay = 1f;
     
     private int _randomIndex;
     private Vector3 _spawnPosition;
@@ -36,7 +36,7 @@ public class EnemySpawner : MonoBehaviour
                 enemyScript.SetTarget(targetDestination);
             }
 
-            yield return new WaitForSeconds(spawnRate);
+            yield return new WaitForSeconds(spawnDelay);
         }
             
     }
